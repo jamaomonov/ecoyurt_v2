@@ -6,7 +6,11 @@ import { GlassPanel } from "@/components/layout/glass-panel"
 import { Button } from "@/components/ui/button"
 import { FileText, MapPin, Calendar, CheckCircle } from "lucide-react"
 
-export function PartnershipSection() {
+interface PartnershipSectionProps {
+  onPartnershipClick?: () => void
+}
+
+export function PartnershipSection({ onPartnershipClick }: PartnershipSectionProps) {
   const steps = [
     {
       icon: FileText,
@@ -41,7 +45,11 @@ export function PartnershipSection() {
                 Каждая новая локация EcoYurt — это точка роста для региона: рабочие места, приток гостей, развитие локального бизнеса и инфраструктуры. Мы открыты к сотрудничеству с теми, кто разделяет наш подход к устойчивому развитию и бережному туризму.
               </p>
               
-              <Button size="lg" className="rounded-full px-8 py-4 text-lg">
+              <Button 
+                size="lg" 
+                className="rounded-full px-8 py-4 text-lg"
+                onClick={onPartnershipClick}
+              >
                 Узнать о сотрудничестве
               </Button>
             </div>

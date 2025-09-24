@@ -5,7 +5,11 @@ import { Pill } from "@/components/ui/pill"
 import { Metric } from "@/components/ui/metric"
 import Image from "next/image"
 
-export function HeroSection() {
+interface HeroSectionProps {
+  onQuestionClick?: () => void
+}
+
+export function HeroSection({ onQuestionClick }: HeroSectionProps) {
   return (
     <section className="py-20">
       <Container>
@@ -22,11 +26,21 @@ export function HeroSection() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" variant="premium" className="rounded-full px-8 py-4 text-lg">
+              <Button 
+                size="lg" 
+                variant="premium" 
+                className="rounded-full px-8 py-4 text-lg"
+                onClick={onQuestionClick}
+              >
                 Задать вопрос
               </Button>
-              <Button size="lg" variant="outline" className="rounded-full px-8 py-4 text-lg">
-                О проекте
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="rounded-full px-8 py-4 text-lg"
+                asChild
+              >
+                <a href="#about">О проекте</a>
               </Button>
             </div>
 

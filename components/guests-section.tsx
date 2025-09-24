@@ -6,7 +6,11 @@ import { GlassPanel } from "@/components/layout/glass-panel"
 import { Button } from "@/components/ui/button"
 import { Wifi, Shield, Droplets, Star, Apple, Heart, Users, Car } from "lucide-react"
 
-export function GuestsSection() {
+interface GuestsSectionProps {
+  onAvailabilityClick?: () => void
+}
+
+export function GuestsSection({ onAvailabilityClick }: GuestsSectionProps) {
   const benefits = [
     {
       icon: Wifi,
@@ -66,7 +70,11 @@ export function GuestsSection() {
                 EcoYurt создана для тех, кто хочет тишины, вида на небо и ощущение дома. Здесь можно полноценно работать онлайн, заниматься здоровьем и проводить время с близкими — всё это в нескольких шагах от дикой природы.
               </p>
               
-              <Button size="lg" className="rounded-full px-8 py-4 text-lg">
+              <Button 
+                size="lg" 
+                className="rounded-full px-8 py-4 text-lg"
+                onClick={onAvailabilityClick}
+              >
                 Спросить о доступности
               </Button>
             </div>

@@ -8,10 +8,13 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useState } from "react"
-import { Mail, Phone, MapPin } from "lucide-react"
+import { Mail, Phone, MapPin, Send } from "lucide-react"
+import { useToast } from "@/hooks/use-toast"
 
 export function ContactsSection() {
+  const { toast } = useToast()
   const [isPartner, setIsPartner] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -21,10 +24,53 @@ export function ContactsSection() {
     city: ""
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Здесь будет логика отправки формы
-    console.log("Form submitted:", formData)
+    setIsLoading(true)
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone || undefined,
+          message: formData.message,
+          selected: isPartner ? "partnership_detailed" : "contact_form",
+          company: isPartner ? formData.company : undefined,
+          city: isPartner ? formData.city : undefined
+        })
+      })
+
+      if (response.ok) {
+        toast({
+          title: "Сообщение отправлено!",
+          description: "Мы свяжемся с вами в течение 24 часов.",
+        })
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          message: "",
+          company: "",
+          city: ""
+        })
+        setIsPartner(false)
+      } else {
+        throw new Error("Ошибка отправки")
+      }
+    } catch (error) {
+      toast({
+        title: "Ошибка отправки",
+        description: "Попробуйте позже или свяжитесь с нами по телефону.",
+        variant: "destructive"
+      })
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -133,8 +179,23 @@ export function ContactsSection() {
                 )}
               </div>
 
-              <Button type="submit" size="lg" className="w-full rounded-full py-4 text-lg">
-                Отправить
+              <Button 
+                type="submit" 
+                size="lg" 
+                className="w-full rounded-full py-4 text-lg"
+                disabled={isLoading || !formData.name || !formData.email || !formData.message}
+              >
+                {isLoading ? (
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    Отправляем...
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <Send className="w-4 h-4" />
+                    Отправить
+                  </div>
+                )}
               </Button>
             </form>
           </GlassPanel>

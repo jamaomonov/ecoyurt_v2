@@ -6,7 +6,11 @@ import Link from "next/link"
 import { useEffect, useState } from "react"
 // removed sheet; custom vertical menu panel instead
 
-export function Header() {
+interface HeaderProps {
+  onContactClick?: () => void
+}
+
+export function Header({ onContactClick }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
 
@@ -53,7 +57,11 @@ export function Header() {
 
             {/* Кнопка Связаться */}
             <div className="hidden lg:block">
-              <Button size="sm" className="rounded-full px-6 py-2">
+              <Button 
+                size="sm" 
+                className="rounded-full px-6 py-2"
+                onClick={onContactClick}
+              >
                 Связаться
               </Button>
             </div>
